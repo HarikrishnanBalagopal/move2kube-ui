@@ -68,7 +68,7 @@ jobs:
               tag_exists = true;
               core.info(`the tag ${tag} already exists on ${resp.data.object.type} ${resp.data.object.sha}`);
             } catch(err) {
-              if(err.status !== 404){
+              if(err.status !== 404 && err.status !== '404'){
                 throw err;
               }
             }
@@ -122,7 +122,7 @@ jobs:
       - run: mv *.tgz temp/
       - run: curl -L -o oldindex.yaml https://move2kube.konveyor.io/index.yaml
       - run: helm repo index --merge oldindex.yaml --url https://github.com/konveyor/move2kube-ui/releases/download/${{ github.event.inputs.tag }} temp/
-      - uses: konveyor/move2kube-upload-release-action@v3
+      - uses: konveyor/move2kube-upload-release-action@v3.0.1
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.tag }}
